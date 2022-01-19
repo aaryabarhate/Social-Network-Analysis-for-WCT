@@ -1,0 +1,61 @@
+Installing Packages 
+```{r}
+install.packages("igraph")
+install.packages("readr")
+install.packages("haven")
+```
+
+
+Loading Packages 
+```{r}
+library(ggplot2)
+library(igraph)
+library(readr)
+library(haven)
+```
+
+Formatting the data to create an igraph style edgelist
+```{r}
+CasteNetwork_Graph=graph.data.frame(Caste_Network_ST,directed = T)
+```
+
+Vizualizations: Caste Network
+
+Layout Options
+```{r}
+set.seed(3598)
+layout1 <- layout.fruchterman.reingold(CasteNetwork_Graph)
+```
+
+Node/Vertex Options: Color
+```{r}
+V(CasteNetwork_Graph)$color <- "grey"
+V(CasteNetwork_Graph)[degree(CasteNetwork_Graph, mode = "in")>8]$color <-"yellow"
+V(CasteNetwork_Graph)$size=degree(CasteNetwork_Graph, mode = "in")/500
+```
+
+Edge Options: Size
+```{r}
+E(CasteNetwork_Graph)$color <-"grey"
+```
+
+Plotting
+```{r}
+plot(CasteNetwork_Graph, edge.arrow.size=0.0001, edge.arrow.mode="-")
+
+```
+
+```{r}
+lapply(c("devtools", "sna", "intergraph", "igraph", "network"), install.packages)
+library(devtools)
+devtools::install_github(repo="ggally", username="ggobi")
+lapply(c("sna", "intergraph", "GGally", "igraph", "network"), 
+       require, character.only=T)
+
+# Set up data
+set.seed(123)
+g <- barabasi.game(Caste_Network_ST)
+
+# Plot data
+g.plot <- g(g, mode = "fruchtermanreingold")
+```
